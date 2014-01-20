@@ -21,9 +21,9 @@ var bitcoin = bitcoin || {
             throw "id and callback are required";
         }
         callback({
-            id: 123,
+            id: id,
             amount: 10,
-            type: TX_TYPE.TX_TYPE__INCOMING,
+            type: bitcoin.TX_TYPE_INCOMING,
             timestamp: (new Date()).toString(),
             inputAddresses: ['HASH1'],
             outputAddresses: ['HASH2']
