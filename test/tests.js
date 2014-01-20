@@ -21,3 +21,14 @@ describe('getSystemInfo', function(){
     })
   })
 })
+
+describe('addExchangeRateListener', function(){
+  it('passes currency and exchange rate to callback when updateExchangeRate is invoked', function(){
+    var currency = "SGD"
+    bitcoin.addExchangeRateListener(function(currency, rate){
+      expect(currency).to.eql(currency)
+      expect(rate).to.be.a("number")
+    })
+    bitcoin.updateExchangeRate(currency)
+  })
+})

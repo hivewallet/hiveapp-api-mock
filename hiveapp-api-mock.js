@@ -44,6 +44,19 @@ var bitcoin = bitcoin || {
         });
     },
 
+    addExchangeRateListener: function(callback) {
+        if (!callback){ throw "callback is required" }
+
+        bitcoin.exchangeRateListeners = bitcoin.exchangeRateListeners || []
+        bitcoin.exchangeRateListeners.push(callback)
+    },
+
+    updateExchangeRate: function(currency) {
+      bitcoin.exchangeRateListeners.forEach(function(fn){
+        fn(currency, Number((Math.random() * 1000).toFixed(2)))
+      })
+    },
+
     getUserInfo: function(callback){
         if (!callback){
             throw "callback is required";
