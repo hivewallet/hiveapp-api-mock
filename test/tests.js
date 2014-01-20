@@ -12,3 +12,12 @@ describe('getUserInfo', function(){
   })
 })
 
+describe('getSystemInfo', function(){
+  it('passes system info hash to callback provided', function(){
+    bitcoin.getSystemInfo(function(info){
+      expect(info).to.only.have.keys('version', 'buildNumber',
+                                     'decimalSeparator', 'locale',
+                                     'preferredCurrency', 'preferredBitcoinFormat')
+    })
+  })
+})

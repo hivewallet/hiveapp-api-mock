@@ -34,7 +34,14 @@ var bitcoin = bitcoin || {
         if (!callback){
             throw "callback is undefined";
         }
-        callback({ decimalSeparator: "," });
+        callback({
+          version: "0.9",
+          buildNumber: "2013120901",
+          decimalSeparator: ",",
+          locale: "en",
+          preferredCurrency: "USD",
+          preferredBitcoinFormat: "µBTC"
+        });
     },
 
     getUserInfo: function(callback){
