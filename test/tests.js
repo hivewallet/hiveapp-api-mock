@@ -5,29 +5,32 @@ describe('constants', function(){
 })
 
 describe('getUserInfo', function(){
-  it('passes user info hash to callback provided', function(){
+  it('passes user info hash to callback provided', function(done){
     bitcoin.getUserInfo(function(info){
       expect(info).to.only.have.keys('firstName', 'lastName', 'email', 'address')
+      done()
     })
   })
 })
 
 describe('getSystemInfo', function(){
-  it('passes system info hash to callback provided', function(){
+  it('passes system info hash to callback provided', function(done){
     bitcoin.getSystemInfo(function(info){
       expect(info).to.only.have.keys('version', 'buildNumber',
                                      'decimalSeparator', 'locale',
                                      'preferredCurrency', 'preferredBitcoinFormat')
+      done()
     })
   })
 })
 
 describe('addExchangeRateListener', function(){
-  it('passes currency and exchange rate to callback when updateExchangeRate is invoked', function(){
+  it('passes currency and exchange rate to callback when updateExchangeRate is invoked', function(done){
     var currency = "SGD"
     bitcoin.addExchangeRateListener(function(currency, rate){
       expect(currency).to.eql(currency)
       expect(rate).to.be.a("number")
+      done()
     })
     bitcoin.updateExchangeRate(currency)
   })
