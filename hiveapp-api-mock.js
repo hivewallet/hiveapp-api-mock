@@ -61,8 +61,8 @@ function mockBitcoin() {
       callback({
         version: "0.9",
         buildNumber: "2013120901",
-        decimalSeparator: ",",
-        locale: "en",
+        decimalSeparator: (0.1).toLocaleString().substring(1, 2),
+        locale: navigator.language,
         preferredCurrency: "USD",
         preferredBitcoinFormat: preferredBitcoinFormat
       });
