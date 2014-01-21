@@ -104,8 +104,7 @@ function mockBitcoin() {
     },
 
     satoshiFromUserString: function(formattedAmount) {
-      var thousandsSeparator = (1000).toLocaleString().substring(1, 2)
-      var floatValue = parseFloat(formattedAmount.replace(thousandsSeparator, ''))
+      var floatValue = bitcoin.valueFromUserString(formattedAmount)
       return floatValue * bitcoinFormatToSatoshi[preferredBitcoinFormat]
     },
 
@@ -117,6 +116,11 @@ function mockBitcoin() {
       });
       return formatter.format(amount).substring(1)
     },
+
+    valueFromUserString: function(formattedAmount) {
+      var thousandsSeparator = (1000).toLocaleString().substring(1, 2)
+      return parseFloat(formattedAmount.replace(thousandsSeparator, ''))
+    }
   };
 }
 

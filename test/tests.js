@@ -170,3 +170,9 @@ describe('userStringForCurrencyValue', function(){
   })
 })
 
+describe('valueFromUserString', function(){
+  it('returns a string formatted in user preferred currency', function(){
+    expect(bitcoin.valueFromUserString("1,230.03")).to.eql(1230.03)
+  })
+})
+
