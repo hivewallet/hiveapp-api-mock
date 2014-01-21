@@ -74,8 +74,11 @@ describe('sendMoney', function(){
         it('id matches', function(){ expect(info.id).to.eql(transactionId) })
         it('amount matches', function(){ expect(info.amount).to.eql(amount) })
 
-        it('input address matches', function(){
-          expect(info.inputAddresses).to.eql([userAddress])
+        it('input address matches', function(done){
+          bitcoin.getUserInfo(function(userInfo){
+            expect(info.inputAddresses).to.eql([userInfo.address])
+            done()
+          })
         })
         it('output address matches', function(){
           expect(info.outputAddresses).to.eql([address])

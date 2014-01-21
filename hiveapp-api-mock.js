@@ -1,89 +1,94 @@
-var userAddress = 'poqjer23rfc234laq'
-var bitcoin = bitcoin || {
-  BTC_IN_SATOSHI: 100000000,
-  MBTC_IN_SATOSHI: 100000,
-  UBTC_IN_SATOSHI: 100,
+var bitcoin = bitcoin || mockBitcoin()
 
-  TX_TYPE_INCOMING: "incoming",
-  TX_TYPE_OUTGOING: "outgoing",
+function mockBitcoin() {
+  var userAddress = 'poqjer23rfc234laq';
+  var transactions = [];
+  var exchangeRateListeners = [];
 
-  sendMoney: function(address, amount, callback){
-    if (!address) { throw "address argument is undefined" }
+  return {
+    BTC_IN_SATOSHI: 100000000,
+    MBTC_IN_SATOSHI: 100000,
+    UBTC_IN_SATOSHI: 100,
 
-    var result = prompt("Send bitcoins to " + address + ": ", amount);
+    TX_TYPE_INCOMING: "incoming",
+    TX_TYPE_OUTGOING: "outgoing",
 
-    if (callback) {
-      if (result) {
-        bitcoin.transactions = bitcoin.transactions || []
-        var txid = bitcoin.transactions.length + "";
+    sendMoney: function(address, amount, callback){
+      if (!address) { throw "address argument is undefined" }
 
-        bitcoin.transactions.push({
-          id: txid,
-          amount: amount,
-          type: bitcoin.TX_TYPE_OUTGOING,
-          timestamp: new Date().toISOString(),
-          inputAddresses: [userAddress],
-          outputAddresses: [address]
-        });
+      var result = prompt("Send bitcoins to " + address + ": ", amount);
 
-        callback(true, txid);
-      } else {
-        callback(false);
+      if (callback) {
+        if (result) {
+          var txid = transactions.length + "";
+
+          transactions.push({
+            id: txid,
+            amount: amount,
+            type: bitcoin.TX_TYPE_OUTGOING,
+            timestamp: new Date().toISOString(),
+            inputAddresses: [userAddress],
+            outputAddresses: [address]
+          });
+
+          callback(true, txid);
+        } else {
+          callback(false);
+        }
       }
+    },
+
+    getTransaction: function(id, callback){
+      if (!id || !callback){ throw "id and callback are required" }
+
+      var tx = transactions.filter(function(t){ return t.id == id })[0]
+      callback(tx);
+    },
+
+    getSystemInfo: function(callback){
+      if (!callback){
+        throw "callback is undefined";
+      }
+      callback({
+        version: "0.9",
+        buildNumber: "2013120901",
+        decimalSeparator: ",",
+        locale: "en",
+        preferredCurrency: "USD",
+        preferredBitcoinFormat: "µBTC"
+      });
+    },
+
+    addExchangeRateListener: function(callback) {
+      if (!callback){ throw "callback is required" }
+
+      exchangeRateListeners.push(callback)
+    },
+
+    updateExchangeRate: function(currency) {
+      exchangeRateListeners.forEach(function(fn){
+        fn(currency, Number((Math.random() * 1000).toFixed(2)))
+      })
+    },
+
+    getUserInfo: function(callback){
+      if (!callback){
+        throw "callback is required";
+      }
+      callback({
+        firstName: 'Homer',
+        lastName:  'Simpson',
+        email:     'homer@fake.com',
+        address:   userAddress
+      });
+    },
+
+    makeRequest: function(endpoint, args){
+      args['url'] = endpoint.replace(/http[s]?:\/\//gi, "http://www.corsproxy.com/");
+        $.ajax(args);
     }
-  },
-
-  getTransaction: function(id, callback){
-    if (!id || !callback){ throw "id and callback are required" }
-
-    var tx = bitcoin.transactions.filter(function(t){ return t.id == id })[0]
-    callback(tx);
-  },
-
-  getSystemInfo: function(callback){
-    if (!callback){
-      throw "callback is undefined";
-    }
-    callback({
-      version: "0.9",
-      buildNumber: "2013120901",
-      decimalSeparator: ",",
-      locale: "en",
-      preferredCurrency: "USD",
-      preferredBitcoinFormat: "µBTC"
-    });
-  },
-
-  addExchangeRateListener: function(callback) {
-    if (!callback){ throw "callback is required" }
-
-    bitcoin.exchangeRateListeners = bitcoin.exchangeRateListeners || []
-    bitcoin.exchangeRateListeners.push(callback)
-  },
-
-  updateExchangeRate: function(currency) {
-    bitcoin.exchangeRateListeners.forEach(function(fn){
-      fn(currency, Number((Math.random() * 1000).toFixed(2)))
-    })
-  },
-
-  getUserInfo: function(callback){
-    if (!callback){
-      throw "callback is required";
-    }
-    callback({
-      firstName: 'Homer',
-      lastName:  'Simpson',
-      email:     'homer@fake.com',
-      address:   userAddress
-    });
-  },
-
-  makeRequest: function(endpoint, args){
-    args['url'] = endpoint.replace(/http[s]?:\/\//gi, "http://www.corsproxy.com/");
-    $.ajax(args);
-  }
-};
+  };
+}
 
 var btc_string_to_satoshi = function(amount, separator){
   if (typeof(amount)=='string'){
