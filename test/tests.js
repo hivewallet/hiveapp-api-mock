@@ -36,20 +36,73 @@ describe('addExchangeRateListener', function(){
   })
 })
 
-describe('getTransaction', function(){
-  it('passes TX info hash to callback provided', function(done){
-    var txId = '745b5459282e2630671d4139597b68f410acae1ed2c4e4dd2072b58bac0bc709'
-    bitcoin.getTransaction(txId, function(info){
-      expect(info).to.only.have.keys('amount', 'id',
-                                     'inputAddresses', 'outputAddresses',
-                                     'timestamp', 'type')
-      expect(info.id).to.eql(txId)
-      expect(info.amount).to.be.a('number')
-      expect(info.inputAddresses).to.be.an('array')
-      expect(info.outputAddresses).to.be.an('array')
-      expect(isNaN(Date.parse(info.timestamp))).to.be(false)
-      expect([bitcoin.TX_TYPE_INCOMING, bitcoin.TX_TYPE_OUTGOING]).to.contain(info.type)
-      done()
+describe('sendMoney', function(){
+  var originalPrompt;
+  var address = "142m1MpXHhymF4aASiWwYohe1Y55v5BQwc"
+  var amount = 5 * bitcoin.MBTC_IN_SATOSHI
+
+  beforeEach(function(){ originalPrompt = window.prompt })
+
+  describe('success', function(){
+    beforeEach(function(){
+      window.prompt = function(){ return true }
+    })
+
+    it('true and transaction ID are passed to callback', function(done){
+      bitcoin.sendMoney(address, amount, function(success, transactionId){
+        expect(success).to.be(true)
+        expect(transactionId).to.be.a('string')
+        done()
+      })
+    })
+
+    describe('transaction can be looked up by the returned transaction ID', function(){
+      var success, transactionId, info;
+
+      beforeEach(function(done){
+        bitcoin.sendMoney(address, amount, function(_success, _transactionId){
+          bitcoin.getTransaction(_transactionId, function(_info){
+            success = _success;
+            transactionId = _transactionId;
+            info = _info;
+            done()
+          })
+        })
+      })
+
+      describe('getTransaction', function(){
+        it('id matches', function(){ expect(info.id).to.eql(transactionId) })
+        it('amount matches', function(){ expect(info.amount).to.eql(amount) })
+
+        it('input address matches', function(){
+          expect(info.inputAddresses).to.eql([userAddress])
+        })
+        it('output address matches', function(){
+          expect(info.outputAddresses).to.eql([address])
+        })
+        it('timestamp is parseable', function(){
+          expect(isNaN(Date.parse(info.timestamp))).to.be(false)
+        })
+        it('type is outgoing', function(){
+          expect(info.type).to.eql(bitcoin.TX_TYPE_OUTGOING)
+        })
+      })
     })
   })
+
+  describe('failure', function(){
+    beforeEach(function(){
+      window.prompt = function(){ return false }
+    })
+
+    it('false is passed to the callback', function(done){
+      bitcoin.sendMoney(address, amount, function(success, transactionId){
+        expect(success).to.be(false)
+        done()
+      })
+    })
+  })
+
+  afterEach(function(){ window.prompt = originalPrompt })
 })
+

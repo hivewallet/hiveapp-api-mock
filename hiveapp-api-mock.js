@@ -1,3 +1,4 @@
+var userAddress = 'poqjer23rfc234laq'
 var bitcoin = bitcoin || {
     BTC_IN_SATOSHI: 100000000,
     MBTC_IN_SATOSHI: 100000,
@@ -6,28 +7,37 @@ var bitcoin = bitcoin || {
     TX_TYPE_INCOMING: "incoming",
     TX_TYPE_OUTGOING: "outgoing",
 
+    sendMoney: function(address, amount, callback){
+      if (!address) { throw "address argument is undefined" }
 
-    sendMoney: function(hash, amount, callback){
-        if (!hash){
-            throw "hash argument is undefined";
+      var result = prompt("Send bitcoins to " + address + ": ", amount);
+
+      if (callback) {
+        if (result) {
+          bitcoin.transactions = bitcoin.transactions || []
+          var txid = bitcoin.transactions.length + "";
+
+          bitcoin.transactions.push({
+            id: txid,
+            amount: amount,
+            type: bitcoin.TX_TYPE_OUTGOING,
+            timestamp: new Date().toISOString(),
+            inputAddresses: [userAddress],
+            outputAddresses: [address]
+          });
+
+          callback(true, txid);
+        } else {
+          callback(false);
         }
-        if (callback){
-            callback(true, 'FAKE_HASH');
-        }
+      }
     },
 
     getTransaction: function(id, callback){
-        if (!id || !callback){
-            throw "id and callback are required";
-        }
-        callback({
-            id: id,
-            amount: 10,
-            type: bitcoin.TX_TYPE_INCOMING,
-            timestamp: (new Date()).toString(),
-            inputAddresses: ['HASH1'],
-            outputAddresses: ['HASH2']
-        });
+      if (!id || !callback){ throw "id and callback are required" }
+
+      var tx = bitcoin.transactions.filter(function(t){ return t.id == id })[0]
+      callback(tx);
     },
 
     getSystemInfo: function(callback){
@@ -65,7 +75,7 @@ var bitcoin = bitcoin || {
             firstName: 'Homer',
             lastName:  'Simpson',
             email:     'homer@fake.com',
-            address:   'poqjer23rfc234laq'
+            address:   userAddress
         });
     },
 
