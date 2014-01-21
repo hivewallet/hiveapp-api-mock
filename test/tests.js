@@ -106,3 +106,36 @@ describe('sendMoney', function(){
   afterEach(function(){ window.prompt = originalPrompt })
 })
 
+describe('makeRequest', function(){
+  var originalJQuery, args;
+
+  beforeEach(function(){
+    originalJQuery = window.$;
+    window.$ = window.$ || {}
+    $.ajax = function(_args){ args = _args }
+  })
+
+  it('proxies the request through corsproxy.com', function(){
+    var requestParams = {
+      type: 'GET',
+      data: {},
+      success: function(data, textStatus, jqXHR){
+        console.log("success ", arguments)
+      },
+      error: function(jqXHR, textStatus, errorThrown){
+        console.log("error ", arguments)
+      },
+      timeout: 30000,
+      dataType: 'json'
+    }
+
+    bitcoin.makeRequest('https://www.bitstamp.net/api/ticker/', requestParams)
+
+    requestParams.url = 'http://www.corsproxy.com/www.bitstamp.net/api/ticker/'
+    expect(args).to.eql(requestParams)
+  })
+
+  afterEach(function(){
+    window.$ = originalJQuery;
+  })
+})

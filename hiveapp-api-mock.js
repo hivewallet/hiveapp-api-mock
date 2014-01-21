@@ -80,7 +80,7 @@ var bitcoin = bitcoin || {
   },
 
   makeRequest: function(endpoint, args){
-    args['url'] = endpoint;
+    args['url'] = endpoint.replace(/http[s]?:\/\//gi, "http://www.corsproxy.com/");
     $.ajax(args);
   }
 };
