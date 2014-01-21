@@ -142,3 +142,12 @@ describe('makeRequest', function(){
     window.$ = originalJQuery;
   })
 })
+
+describe('userStringForSatoshi', function(){
+  it('returns the value string formatted in user preferred denomination (default to mBTC)', function(){
+    expect(bitcoin.userStringForSatoshi(bitcoin.BTC_IN_SATOSHI)).to.eql("1,000")
+    expect(bitcoin.userStringForSatoshi(bitcoin.MBTC_IN_SATOSHI)).to.eql("1")
+    expect(bitcoin.userStringForSatoshi(bitcoin.UBTC_IN_SATOSHI)).to.eql("0.001")
+  })
+})
+

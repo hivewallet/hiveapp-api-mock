@@ -1,14 +1,23 @@
 var bitcoin = bitcoin || mockBitcoin()
 
 function mockBitcoin() {
+  var _BTC_IN_SATOSHI = 100000000;
+  var _MBTC_IN_SATOSHI = 100000;
+  var _UBTC_IN_SATOSHI = 100;
   var userAddress = 'poqjer23rfc234laq';
   var transactions = [];
   var exchangeRateListeners = [];
+  var bitcoinFormatToSatoshi = {
+    BTC: _BTC_IN_SATOSHI,
+    mBTC: _MBTC_IN_SATOSHI,
+    µBTC: _UBTC_IN_SATOSHI
+  }
+  var preferredBitcoinFormat = 'mBTC';
 
   return {
-    BTC_IN_SATOSHI: 100000000,
-    MBTC_IN_SATOSHI: 100000,
-    UBTC_IN_SATOSHI: 100,
+    BTC_IN_SATOSHI: _BTC_IN_SATOSHI,
+    MBTC_IN_SATOSHI: _MBTC_IN_SATOSHI,
+    UBTC_IN_SATOSHI: _UBTC_IN_SATOSHI,
 
     TX_TYPE_INCOMING: "incoming",
     TX_TYPE_OUTGOING: "outgoing",
@@ -55,7 +64,7 @@ function mockBitcoin() {
         decimalSeparator: ",",
         locale: "en",
         preferredCurrency: "USD",
-        preferredBitcoinFormat: "µBTC"
+        preferredBitcoinFormat: preferredBitcoinFormat
       });
     },
 
@@ -86,7 +95,13 @@ function mockBitcoin() {
     makeRequest: function(endpoint, args){
       args['url'] = endpoint.replace(/http[s]?:\/\//gi, "http://www.corsproxy.com/");
         $.ajax(args);
+    },
+
+    userStringForSatoshi: function(satoshiAmount) {
+      var amount = satoshiAmount / bitcoinFormatToSatoshi[preferredBitcoinFormat]
+      return amount.toLocaleString()
     }
+
   };
 }
 
