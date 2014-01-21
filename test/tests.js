@@ -151,3 +151,11 @@ describe('userStringForSatoshi', function(){
   })
 })
 
+describe('satoshiFromUserString', function(){
+  it('given a formatted string in user preferred denomination (default to mBTC) return the satoshi value', function(){
+    expect(bitcoin.satoshiFromUserString("1,000")).to.eql(bitcoin.BTC_IN_SATOSHI)
+    expect(bitcoin.satoshiFromUserString("1")).to.eql(bitcoin.MBTC_IN_SATOSHI)
+    expect(bitcoin.satoshiFromUserString("0.001")).to.eql(bitcoin.UBTC_IN_SATOSHI)
+  })
+})
+

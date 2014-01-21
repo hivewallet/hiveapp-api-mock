@@ -100,8 +100,13 @@ function mockBitcoin() {
     userStringForSatoshi: function(satoshiAmount) {
       var amount = satoshiAmount / bitcoinFormatToSatoshi[preferredBitcoinFormat]
       return amount.toLocaleString()
-    }
+    },
 
+    satoshiFromUserString: function(formattedAmount) {
+      var thousandsSeparator = (1000).toLocaleString().substring(1, 2)
+      var floatValue = parseFloat(formattedAmount.replace(thousandsSeparator, ''))
+      return floatValue * bitcoinFormatToSatoshi[preferredBitcoinFormat]
+    }
   };
 }
 
