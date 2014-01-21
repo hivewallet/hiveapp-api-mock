@@ -16,6 +16,8 @@ function mockBitcoin() {
   var preferredCurrency = 'USD';
   var locale = navigator.language;
 
+  function async(fn) { setTimeout(fn, 0) }
+
   return {
     BTC_IN_SATOSHI: _BTC_IN_SATOSHI,
     MBTC_IN_SATOSHI: _MBTC_IN_SATOSHI,
@@ -42,9 +44,9 @@ function mockBitcoin() {
             outputAddresses: [address]
           });
 
-          callback(true, txid);
+          async(function() { callback(true, txid) } )
         } else {
-          callback(false);
+          async(function() { callback(false) } )
         }
       }
     },
@@ -53,21 +55,23 @@ function mockBitcoin() {
       if (!id || !callback){ throw "id and callback are required" }
 
       var tx = transactions.filter(function(t){ return t.id == id })[0]
-      callback(tx);
+      async(function(){ callback(tx) })
     },
 
     getSystemInfo: function(callback){
       if (!callback){
         throw "callback is undefined";
       }
-      callback({
-        version: "0.9",
-        buildNumber: "2013120901",
-        decimalSeparator: (0.1).toLocaleString().substring(1, 2),
-        locale: locale,
-        preferredCurrency: "USD",
-        preferredBitcoinFormat: preferredBitcoinFormat
-      });
+      async(function(){
+        callback({
+          version: "0.9",
+          buildNumber: "2013120901",
+          decimalSeparator: (0.1).toLocaleString().substring(1, 2),
+          locale: locale,
+          preferredCurrency: "USD",
+          preferredBitcoinFormat: preferredBitcoinFormat
+        })
+      })
     },
 
     addExchangeRateListener: function(callback) {
@@ -92,17 +96,19 @@ function mockBitcoin() {
       if (!callback){
         throw "callback is required";
       }
-      callback({
-        firstName: 'Homer',
-        lastName:  'Simpson',
-        email:     'homer@fake.com',
-        address:   userAddress
-      });
+      async(function(){
+        callback({
+          firstName: 'Homer',
+          lastName:  'Simpson',
+          email:     'homer@fake.com',
+          address:   userAddress
+        })
+      })
     },
 
     makeRequest: function(endpoint, args){
       args['url'] = endpoint.replace(/http[s]?:\/\//gi, "http://www.corsproxy.com/");
-        $.ajax(args);
+      $.ajax(args)
     },
 
     userStringForSatoshi: function(satoshiAmount) {
