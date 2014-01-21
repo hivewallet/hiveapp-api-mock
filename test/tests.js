@@ -159,3 +159,14 @@ describe('satoshiFromUserString', function(){
   })
 })
 
+describe('userStringForCurrencyValue', function(){
+  it('returns a string formatted in user preferred currency', function(){
+    expect(bitcoin.userStringForCurrencyValue(1230.026)).to.eql("1,230.03")
+    expect(bitcoin.userStringForCurrencyValue(1230.016)).to.eql("1,230.02")
+
+    expect(bitcoin.userStringForCurrencyValue(1230.015)).to.eql("1,230.02")
+    // hive osx app uses NSNumberFormatterRoundHalfEven so take note of the following:
+    // expect(bitcoin.userStringForCurrencyValue(1230.025)).to.eql("1,230.02")
+  })
+})
+

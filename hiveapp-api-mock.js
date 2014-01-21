@@ -13,6 +13,7 @@ function mockBitcoin() {
     µBTC: _UBTC_IN_SATOSHI
   }
   var preferredBitcoinFormat = 'mBTC';
+  var locale = navigator.language;
 
   return {
     BTC_IN_SATOSHI: _BTC_IN_SATOSHI,
@@ -62,7 +63,7 @@ function mockBitcoin() {
         version: "0.9",
         buildNumber: "2013120901",
         decimalSeparator: (0.1).toLocaleString().substring(1, 2),
-        locale: navigator.language,
+        locale: locale,
         preferredCurrency: "USD",
         preferredBitcoinFormat: preferredBitcoinFormat
       });
@@ -106,7 +107,16 @@ function mockBitcoin() {
       var thousandsSeparator = (1000).toLocaleString().substring(1, 2)
       var floatValue = parseFloat(formattedAmount.replace(thousandsSeparator, ''))
       return floatValue * bitcoinFormatToSatoshi[preferredBitcoinFormat]
-    }
+    },
+
+    userStringForCurrencyValue: function(amount) {
+      var formatter = new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 2
+      });
+      return formatter.format(amount).substring(1)
+    },
   };
 }
 
