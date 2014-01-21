@@ -76,6 +76,12 @@ function mockBitcoin() {
       exchangeRateListeners.push(callback)
     },
 
+    removeExchangeRateListener: function(callback) {
+      if (!callback){ throw "callback is required" }
+
+      exchangeRateListeners.splice(exchangeRateListeners.indexOf(callback), 1)
+    },
+
     updateExchangeRate: function(currency) {
       exchangeRateListeners.forEach(function(fn){
         fn(currency, Number((Math.random() * 1000).toFixed(2)))
