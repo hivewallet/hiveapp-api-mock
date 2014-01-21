@@ -13,6 +13,7 @@ function mockBitcoin() {
     µBTC: _UBTC_IN_SATOSHI
   }
   var preferredBitcoinFormat = 'mBTC';
+  var preferredCurrency = 'USD';
   var locale = navigator.language;
 
   return {
@@ -108,13 +109,10 @@ function mockBitcoin() {
       return floatValue * bitcoinFormatToSatoshi[preferredBitcoinFormat]
     },
 
-    userStringForCurrencyValue: function(amount) {
-      var formatter = new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: 'USD',
-        maximumFractionDigits: 2
-      });
-      return formatter.format(amount).substring(1)
+    userStringForCurrencyValue: function(amount, currency) {
+      currency = currency || preferredCurrency
+      var maximumFractionDigits = currency == 'JPY' ? 0 : 2
+      return parseFloat(amount.toFixed(maximumFractionDigits)).toLocaleString()
     },
 
     valueFromUserString: function(formattedAmount) {

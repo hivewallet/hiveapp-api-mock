@@ -168,6 +168,10 @@ describe('userStringForCurrencyValue', function(){
     // hive osx app uses NSNumberFormatterRoundHalfEven so take note of the following:
     // expect(bitcoin.userStringForCurrencyValue(1230.025)).to.eql("1,230.02")
   })
+
+  it('when currency is passed in, returns a string with decimal places formatted in specified currency', function(){
+    expect(bitcoin.userStringForCurrencyValue(1230.026, 'JPY')).to.eql("1,230")
+  })
 })
 
 describe('valueFromUserString', function(){
