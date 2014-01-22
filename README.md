@@ -2,10 +2,7 @@
 
 ### How to use
 
-When [hiveapp-api-mock.js](https://raw2.github.com/javgh/hiveapp-api-mock/master/hiveapp-api-mock.js) is included, it will define the 'bitcoin' object - unless there is already one available - and offer the various API calls as mock functions which do nothing other than returning success and/or dummy data.
-
-Hint: You might want to run Chrome with the '--disable-web-security' flag in
-order to allow makeRequest() to work properly.
+When [hiveapp-api-mock.js](https://raw2.github.com/javgh/hiveapp-api-mock/master/hiveapp-api-mock.js) is included, it defines the 'bitcoin' object - unless there is already one available - and offer a mock API which emulates Hive's JavaScript API.
 
 ### See also
 
