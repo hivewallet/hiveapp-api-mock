@@ -1,3 +1,11 @@
+/*
+ * Hive App API mock https://github.com/javgh/hiveapp-api-mock
+ *
+ * Licensed under the MIT License.
+ *
+ * v1.0.0
+ */
+
 var bitcoin = bitcoin || mockBitcoin()
 
 function mockBitcoin() {
