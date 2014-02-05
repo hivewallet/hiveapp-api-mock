@@ -110,36 +110,24 @@ describe('sendMoney', function(){
 })
 
 describe('makeRequest', function(){
-  var originalJQuery, args;
-
-  beforeEach(function(){
-    originalJQuery = window.$;
-    window.$ = window.$ || {}
-    $.ajax = function(_args){ args = _args }
-  })
-
-  it('proxies the request through corsproxy.com', function(){
+  it('should be successful', function(done){
     var requestParams = {
       type: 'GET',
       data: {},
-      success: function(data, textStatus, jqXHR){
+      success: function(data, status){
         console.log("success ", arguments)
+        expect(status).to.eql(200)
+        done()
       },
-      error: function(jqXHR, textStatus, errorThrown){
+      error: function(data, status, error){
         console.log("error ", arguments)
+        done()
       },
       timeout: 30000,
       dataType: 'json'
     }
 
     bitcoin.makeRequest('https://www.bitstamp.net/api/ticker/', requestParams)
-
-    requestParams.url = 'http://www.corsproxy.com/www.bitstamp.net/api/ticker/'
-    expect(args).to.eql(requestParams)
-  })
-
-  afterEach(function(){
-    window.$ = originalJQuery;
   })
 })
 
