@@ -163,6 +163,12 @@ function mockBitcoin() {
       ajax(url, args)
     },
 
+    installApp: function(url, callback){
+      async(function(){
+        callback(null, true)
+      })
+    },
+
     userStringForSatoshi: function(satoshiAmount) {
       var amount = satoshiAmount / bitcoinFormatToSatoshi[preferredBitcoinFormat]
       return amount.toLocaleString()

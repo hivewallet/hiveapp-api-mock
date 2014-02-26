@@ -39,9 +39,12 @@ describe('addExchangeRateListener', function(){
 describe('sendMoney', function(){
   var originalPrompt;
   var address = "142m1MpXHhymF4aASiWwYohe1Y55v5BQwc"
-  var amount = 5 * bitcoin.MBTC_IN_SATOSHI
+  var amount;
 
-  beforeEach(function(){ originalPrompt = window.prompt })
+  beforeEach(function(){
+    originalPrompt = window.prompt
+    amount = 5 * bitcoin.MBTC_IN_SATOSHI
+  })
 
   describe('success', function(){
     beforeEach(function(){
@@ -128,6 +131,16 @@ describe('makeRequest', function(){
     }
 
     bitcoin.makeRequest('https://www.bitstamp.net/api/ticker/', requestParams)
+  })
+})
+
+describe('installApp', function(){
+  it('works', function(done){
+    bitcoin.installApp('http://example.com/me.hiveapp', function(err, installed){
+      expect(installed).to.be(true)
+      expect(err).to.be(null)
+      done()
+    })
   })
 })
 
