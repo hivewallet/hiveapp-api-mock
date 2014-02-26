@@ -3,7 +3,7 @@
  *
  * Licensed under the MIT License.
  *
- * v1.0.1
+ * v1.1.0
  */
 
 var bitcoin = bitcoin || mockBitcoin()
