@@ -144,6 +144,16 @@ describe('installApp', function(){
   })
 })
 
+describe('getApplication', function(){
+  it('works', function(done){
+    var appId = 'com.hivewallet.bitstamp'
+    bitcoin.getApplication(appId, function(app){
+      expect(app.id).to.eql(appId)
+      done()
+    })
+  })
+})
+
 describe('userStringForSatoshi', function(){
   it('returns the value string formatted in user preferred denomination (default to mBTC)', function(){
     expect(bitcoin.userStringForSatoshi(bitcoin.BTC_IN_SATOSHI)).to.eql("1,000")

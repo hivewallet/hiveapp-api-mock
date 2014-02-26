@@ -169,6 +169,12 @@ function mockBitcoin() {
       })
     },
 
+    getApplication: function(appId, callback){
+      async(function(){
+        callback({id: appId, version: '1.0.0'})
+      })
+    },
+
     userStringForSatoshi: function(satoshiAmount) {
       var amount = satoshiAmount / bitcoinFormatToSatoshi[preferredBitcoinFormat]
       return amount.toLocaleString()
